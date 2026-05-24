@@ -13,18 +13,12 @@ export function Result() {
   const { resetAnswers } = useQuizStore();
 
   const diagnosis = location.state?.diagnosis as DiagnosisResult | undefined;
-
-  if (!diagnosis) {
-    navigate('/');
-    return null;
-  }
-
+  if (!diagnosis) { navigate('/'); return null; }
   const d = diagnosis;
 
   function handleClose() {
     hapticFeedback('success');
     closeApp();
-    // Fallback for browser
     navigate('/');
   }
 
@@ -52,20 +46,17 @@ export function Result() {
       const blob = new Blob([text], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
-      a.download = 'roof-diagnosis.txt';
-      a.click();
+      a.href = url; a.download = 'roof-diagnosis.txt'; a.click();
       URL.revokeObjectURL(url);
     }
   }
 
-  // MainButton: close / return to Telegram after seeing result
   const isTg = useTelegramMainButton('Закрыть', handleClose);
 
   return (
-    <div className="tg-page">
+    <div className="tg-page bg-[var(--tg-theme-secondary-bg-color,#f4f4f8)] dark:bg-[#1c1c1e]">
       {/* Header */}
-      <header className="bg-[var(--tg-theme-bg-color,#fff)] border-b border-gray-100 px-4 pt-safe pt-3 pb-3 flex-shrink-0">
+      <header className="bg-[var(--tg-theme-bg-color,#fff)] dark:bg-[#1c1c1e] border-b border-gray-100 dark:border-white/[0.08] px-4 pt-safe pt-3 pb-3 flex-shrink-0">
         <Logo />
       </header>
 
@@ -78,45 +69,33 @@ export function Result() {
             </svg>
           </div>
           <div>
-            <p className="font-800 text-white text-[15px]" style={{ fontWeight: 800 }}>
-              Предварительный разбор готов
-            </p>
+            <p className="text-white text-[15px]" style={{ fontWeight: 800 }}>Предварительный разбор готов</p>
             <p className="text-white/65 text-[11px]">На основе ваших ответов</p>
           </div>
         </div>
       </div>
 
-      {/* Scrollable content */}
+      {/* Content */}
       <div className="tg-scroll px-4 py-4">
         <ResultCard diagnosis={d} />
       </div>
 
-      {/* Browser-only actions */}
+      {/* Browser actions */}
       {!isTg && (
-        <footer className="flex-shrink-0 px-4 pb-safe pb-5 pt-3 bg-[var(--tg-theme-bg-color,#fff)] border-t border-gray-100 space-y-2.5">
-          <Button fullWidth size="lg" onClick={handleClose}>
-            Отправить заявку специалисту
-          </Button>
+        <footer className="flex-shrink-0 px-4 pb-safe pb-5 pt-3 bg-[var(--tg-theme-bg-color,#fff)] dark:bg-[#1c1c1e] border-t border-gray-100 dark:border-white/[0.08] space-y-2.5">
+          <Button fullWidth size="lg" onClick={handleClose}>Отправить заявку специалисту</Button>
           <div className="flex gap-2.5">
-            <Button variant="secondary" size="md" fullWidth onClick={handleSaveReport}>
-              Сохранить отчёт
-            </Button>
-            <Button variant="ghost" size="md" fullWidth onClick={handleRestart}>
-              Пройти заново
-            </Button>
+            <Button variant="secondary" size="md" fullWidth onClick={handleSaveReport}>Сохранить отчёт</Button>
+            <Button variant="ghost" size="md" fullWidth onClick={handleRestart}>Пройти заново</Button>
           </div>
         </footer>
       )}
 
-      {/* Telegram: extra actions below MainButton */}
+      {/* Telegram — secondary actions */}
       {isTg && (
         <footer className="flex-shrink-0 px-4 pb-safe pb-4 pt-2 flex gap-2.5">
-          <Button variant="secondary" size="sm" fullWidth onClick={handleSaveReport}>
-            Сохранить отчёт
-          </Button>
-          <Button variant="ghost" size="sm" fullWidth onClick={handleRestart}>
-            Пройти заново
-          </Button>
+          <Button variant="secondary" size="sm" fullWidth onClick={handleSaveReport}>Сохранить отчёт</Button>
+          <Button variant="ghost" size="sm" fullWidth onClick={handleRestart}>Пройти заново</Button>
         </footer>
       )}
     </div>

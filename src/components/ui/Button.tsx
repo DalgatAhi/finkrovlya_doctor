@@ -25,9 +25,11 @@ export function Button({
     primary:
       'bg-brand-gradient text-white shadow-lg shadow-brand-blue/20 hover:opacity-90',
     secondary:
-      'bg-white text-brand-blue border-2 border-brand-blue/20 hover:border-brand-blue/40 hover:bg-brand-blue/5',
-    ghost: 'text-gray-500 hover:text-gray-800 hover:bg-gray-100',
-    danger: 'bg-red-500 text-white hover:bg-red-600',
+      'bg-white dark:bg-white/10 text-brand-blue dark:text-brand-purple border-2 border-brand-blue/20 dark:border-brand-purple/30 hover:border-brand-blue/40 dark:hover:border-brand-purple/50 hover:bg-brand-blue/5 dark:hover:bg-brand-purple/10',
+    ghost:
+      'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-white/10',
+    danger:
+      'bg-red-500 text-white hover:bg-red-600',
   };
 
   const sizes = {

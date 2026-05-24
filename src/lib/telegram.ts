@@ -82,14 +82,21 @@ export function isTelegramWebApp(): boolean {
 }
 
 export function initTelegram(): void {
-  const app = tg();
-  if (!app) return;
-  app.ready();
-  app.expand();
+  // Apply theme immediately (before Telegram SDK, for browser fallback)
   applyTheme();
+
+  const app = tg();
+  if (app) {
+    app.ready();
+    app.expand();
+    app.onEvent('viewportChanged', syncViewportHeight);
+    app.onEvent('themeChanged', applyTheme);
+  } else {
+    // In browser: react to system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+  }
+
   syncViewportHeight();
-  app.onEvent('viewportChanged', syncViewportHeight);
-  app.onEvent('themeChanged', applyTheme);
 }
 
 export function expandApp(): void {
@@ -110,26 +117,45 @@ export function getInitData(): string {
 
 // ─── Theme ──────────────────────────────────────────────────────────────────
 
-const BRAND_FALLBACK = {
-  bg_color: '#FFFFFF',
-  secondary_bg_color: '#F4F4F8',
+const LIGHT_DEFAULTS = {
+  bg_color: '#ffffff',
+  secondary_bg_color: '#f4f4f8',
   text_color: '#111827',
-  hint_color: '#6B7280',
+  hint_color: '#6b7280',
   button_color: '#121193',
-  button_text_color: '#FFFFFF',
+  button_text_color: '#ffffff',
+};
+
+const DARK_DEFAULTS = {
+  bg_color: '#1c1c1e',
+  secondary_bg_color: '#2c2c2e',
+  text_color: '#f2f2f7',
+  hint_color: '#8e8e93',
+  button_color: '#ca61c9',
+  button_text_color: '#ffffff',
 };
 
 export function applyTheme(): void {
-  const params = tg()?.themeParams ?? {};
-  const theme = { ...BRAND_FALLBACK, ...params };
+  const app = tg();
   const root = document.documentElement;
 
-  root.style.setProperty('--tg-theme-bg-color', theme.bg_color ?? BRAND_FALLBACK.bg_color);
-  root.style.setProperty('--tg-theme-secondary-bg-color', theme.secondary_bg_color ?? BRAND_FALLBACK.secondary_bg_color);
-  root.style.setProperty('--tg-theme-text-color', theme.text_color ?? BRAND_FALLBACK.text_color);
-  root.style.setProperty('--tg-theme-hint-color', theme.hint_color ?? BRAND_FALLBACK.hint_color);
-  root.style.setProperty('--tg-theme-button-color', theme.button_color ?? BRAND_FALLBACK.button_color);
-  root.style.setProperty('--tg-theme-button-text-color', theme.button_text_color ?? BRAND_FALLBACK.button_text_color);
+  // Determine color scheme: Telegram → browser preference → light
+  const scheme: 'light' | 'dark' =
+    app?.colorScheme ??
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+  // Set data-theme so Tailwind dark: variants activate
+  root.dataset.theme = scheme;
+
+  const fallback = scheme === 'dark' ? DARK_DEFAULTS : LIGHT_DEFAULTS;
+  const params = app?.themeParams ?? {};
+
+  root.style.setProperty('--tg-theme-bg-color', params.bg_color ?? fallback.bg_color);
+  root.style.setProperty('--tg-theme-secondary-bg-color', params.secondary_bg_color ?? fallback.secondary_bg_color);
+  root.style.setProperty('--tg-theme-text-color', params.text_color ?? fallback.text_color);
+  root.style.setProperty('--tg-theme-hint-color', params.hint_color ?? fallback.hint_color);
+  root.style.setProperty('--tg-theme-button-color', params.button_color ?? fallback.button_color);
+  root.style.setProperty('--tg-theme-button-text-color', params.button_text_color ?? fallback.button_text_color);
 }
 
 function syncViewportHeight(): void {

@@ -5,27 +5,24 @@ import { useTelegramMainButton } from '@/hooks/useTelegramButton';
 
 export function Home() {
   const navigate = useNavigate();
-
   const go = () => navigate('/quiz');
-
-  // In Telegram: MainButton handles CTA. In browser: inline button.
   const isTg = useTelegramMainButton('Начать диагностику', go);
 
   return (
-    <div className="tg-page">
-      {/* Compact header */}
-      <header className="flex items-center justify-between px-4 pt-safe pt-3 pb-3 bg-[var(--tg-theme-bg-color,#fff)]">
+    <div className="tg-page bg-[var(--tg-theme-secondary-bg-color,#f4f4f8)] dark:bg-[#1c1c1e]">
+      {/* Header */}
+      <header className="flex items-center justify-between px-4 pt-safe pt-3 pb-3 bg-[var(--tg-theme-bg-color,#fff)] dark:bg-[#1c1c1e] border-b border-transparent dark:border-white/[0.06]">
         <Logo />
-        <span className="text-xs font-semibold text-brand-purple bg-brand-gradient-soft border border-brand-purple/20 rounded-full px-3 py-1">
+        <span className="text-xs font-semibold text-brand-purple bg-brand-purple/10 dark:bg-brand-purple/15 border border-brand-purple/20 dark:border-brand-purple/25 rounded-full px-3 py-1">
           Фирменная диагностика
         </span>
       </header>
 
       {/* Scrollable body */}
-      <div className="tg-scroll px-4 pb-2">
+      <div className="tg-scroll px-4 pb-2 pt-3">
 
-        {/* Hero — gradient card */}
-        <div className="bg-brand-gradient rounded-3xl p-5 mb-4 shadow-lg shadow-brand-blue/20 relative overflow-hidden">
+        {/* Hero */}
+        <div className="bg-brand-gradient rounded-3xl p-5 mb-4 shadow-lg shadow-brand-blue/25 relative overflow-hidden">
           <HeroPattern />
           <div className="relative z-10">
             <span className="inline-flex items-center gap-1.5 bg-white/15 rounded-full px-3 py-1 text-[11px] font-semibold text-white mb-3">
@@ -38,43 +35,33 @@ export function Home() {
             <p className="text-[13px] text-white/75 leading-relaxed mb-4">
               Проверьте крышу за 2 минуты. Ответьте на вопросы, загрузите фото — получите предварительный разбор.
             </p>
-
-            {/* Inline CTA — visible only outside Telegram */}
             {!isTg && (
-              <Button
-                onClick={go}
-                fullWidth
-                className="bg-white !text-brand-blue hover:bg-white/95 shadow-md"
-              >
+              <Button onClick={go} fullWidth className="bg-white !text-brand-blue hover:bg-white/95 shadow-md">
                 Начать диагностику →
               </Button>
             )}
-
             {isTg && (
-              <p className="text-xs text-white/50 text-center">
-                Нажмите кнопку внизу, чтобы начать
-              </p>
+              <p className="text-xs text-white/50 text-center">Нажмите кнопку внизу, чтобы начать</p>
             )}
           </div>
         </div>
 
         {/* Disclaimer */}
-        <p className="text-center text-[11px] text-[var(--tg-theme-hint-color,#6b7280)] mb-4">
+        <p className="text-center text-[11px] text-gray-500 dark:text-gray-400 mb-4">
           Это бесплатно. Точный вывод специалист даст после просмотра фото или осмотра объекта.
         </p>
 
-        {/* Feature rows */}
+        {/* Features */}
         <div className="space-y-2 mb-4">
           {FEATURES.map((f) => (
-            <div key={f.title} className="flex items-center gap-3 bg-[var(--tg-theme-bg-color,#fff)] rounded-2xl px-4 py-3 border border-gray-100">
+            <div
+              key={f.title}
+              className="flex items-center gap-3 bg-white dark:bg-white/[0.07] rounded-2xl px-4 py-3 border border-gray-100 dark:border-white/[0.08]"
+            >
               <span className="text-2xl w-9 text-center flex-shrink-0">{f.icon}</span>
               <div className="min-w-0">
-                <p className="text-sm text-[var(--tg-theme-text-color,#111)] font-semibold leading-snug">
-                  {f.title}
-                </p>
-                <p className="text-xs text-[var(--tg-theme-hint-color,#6b7280)] mt-0.5 leading-snug">
-                  {f.desc}
-                </p>
+                <p className="text-sm text-gray-900 dark:text-white font-semibold leading-snug">{f.title}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 leading-snug">{f.desc}</p>
               </div>
               <span className="ml-auto text-brand-purple flex-shrink-0">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -86,8 +73,8 @@ export function Home() {
         </div>
 
         {/* Steps */}
-        <div className="bg-[var(--tg-theme-secondary-bg-color,#f4f4f8)] rounded-2xl px-4 py-4 mb-4">
-          <p className="text-[10px] font-bold text-[var(--tg-theme-hint-color,#6b7280)] uppercase tracking-widest mb-3">
+        <div className="bg-white dark:bg-white/[0.07] rounded-2xl px-4 py-4 mb-4 border border-gray-100 dark:border-white/[0.08]">
+          <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">
             Как это работает
           </p>
           <div className="space-y-2.5">
@@ -96,13 +83,13 @@ export function Home() {
                 <span className="w-5 h-5 rounded-full bg-brand-gradient text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
                   {i + 1}
                 </span>
-                <p className="text-[13px] text-[var(--tg-theme-text-color,#111)] leading-snug">{s}</p>
+                <p className="text-[13px] text-gray-700 dark:text-gray-200 leading-snug">{s}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="text-center text-[11px] text-[var(--tg-theme-hint-color,#6b7280)] pb-4 leading-relaxed">
+        <p className="text-center text-[11px] text-gray-400 dark:text-gray-500 pb-4 leading-relaxed">
           ФИН КРОВЛЯ сначала находит причину, потом предлагает решение.
         </p>
       </div>
@@ -130,9 +117,8 @@ function HeroPattern() {
         [0, 1, 2].map((col) => (
           <path
             key={`${row}-${col}`}
-            d={`M${col * 40 + 0} ${row * 40 + 20} L${col * 40 + 20} ${row * 40} L${col * 40 + 40} ${row * 40 + 20}`}
-            stroke="white"
-            strokeWidth="1.5"
+            d={`M${col * 40} ${row * 40 + 20} L${col * 40 + 20} ${row * 40} L${col * 40 + 40} ${row * 40 + 20}`}
+            stroke="white" strokeWidth="1.5"
           />
         ))
       )}

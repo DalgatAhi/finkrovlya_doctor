@@ -3,15 +3,34 @@
 @tailwind utilities;
 
 @layer base {
-  /* ── Telegram CSS variable defaults (overridden at runtime by applyTheme) ── */
+  /* ── Light theme CSS variables (defaults) ─────────────────────────────── */
   :root {
     --tg-viewport-height: 100dvh;
+
     --tg-theme-bg-color: #ffffff;
     --tg-theme-secondary-bg-color: #f4f4f8;
     --tg-theme-text-color: #111827;
     --tg-theme-hint-color: #6b7280;
     --tg-theme-button-color: #121193;
     --tg-theme-button-text-color: #ffffff;
+  }
+
+  /* ── Dark theme CSS variables — zero JS flash via media query ─────────── */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --tg-theme-bg-color: #1c1c1e;
+      --tg-theme-secondary-bg-color: #2c2c2e;
+      --tg-theme-text-color: #f2f2f7;
+      --tg-theme-hint-color: #8e8e93;
+      --tg-theme-button-color: #ca61c9;
+      --tg-theme-button-text-color: #ffffff;
+    }
+  }
+
+  /* ── Explicit data-theme overrides (set by applyTheme() at runtime) ───── */
+  [data-theme="dark"] {
+    --tg-theme-bg-color: var(--tg-theme-bg-color, #1c1c1e);
+    --tg-theme-secondary-bg-color: var(--tg-theme-secondary-bg-color, #2c2c2e);
   }
 
   * {
@@ -23,7 +42,6 @@
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Prevent bounce scroll — important for Telegram Mini App */
     overscroll-behavior: none;
   }
 
@@ -31,36 +49,30 @@
     margin: 0;
     background: var(--tg-theme-secondary-bg-color, #f4f4f8);
     overscroll-behavior: none;
-    /* Disable text selection (feels more native) */
     -webkit-user-select: none;
     user-select: none;
   }
 
-  /* Allow text selection inside inputs */
   input, textarea {
     -webkit-user-select: text;
     user-select: text;
   }
 
-  /* Safe areas */
   .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
   .pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
 }
 
-/* Viewport-aware full height */
 #root {
   min-height: 100dvh;
   min-height: var(--tg-viewport-height, 100dvh);
 }
 
-/* Page-height container for Telegram */
 .tg-page {
   min-height: var(--tg-viewport-height, 100dvh);
   display: flex;
   flex-direction: column;
 }
 
-/* Scrollable content area that fills remaining space */
 .tg-scroll {
   flex: 1;
   overflow-y: auto;

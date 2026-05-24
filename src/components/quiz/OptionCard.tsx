@@ -14,8 +14,8 @@ export function OptionCard({ label, icon, selected, onClick }: OptionCardProps) 
         border-2 transition-all duration-200 active:scale-[0.97]
         ${
           selected
-            ? 'border-brand-blue bg-brand-gradient-soft shadow-md shadow-brand-blue/10'
-            : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50/60'
+            ? 'border-brand-blue dark:border-brand-purple bg-brand-gradient-soft dark:bg-brand-purple/15 shadow-md shadow-brand-blue/10 dark:shadow-brand-purple/10'
+            : 'border-gray-100 dark:border-white/10 bg-white dark:bg-white/[0.05] hover:border-gray-200 dark:hover:border-white/20 hover:bg-gray-50/60 dark:hover:bg-white/[0.08]'
         }
       `}
     >
@@ -24,7 +24,9 @@ export function OptionCard({ label, icon, selected, onClick }: OptionCardProps) 
       )}
       <span
         className={`text-base font-medium leading-snug ${
-          selected ? 'text-brand-blue' : 'text-gray-800'
+          selected
+            ? 'text-brand-blue dark:text-brand-purple'
+            : 'text-gray-800 dark:text-gray-100'
         }`}
       >
         {label}
@@ -33,7 +35,11 @@ export function OptionCard({ label, icon, selected, onClick }: OptionCardProps) 
         <span
           className={`
             w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
-            ${selected ? 'border-brand-blue bg-brand-blue' : 'border-gray-300 bg-white'}
+            ${
+              selected
+                ? 'border-brand-blue dark:border-brand-purple bg-brand-blue dark:bg-brand-purple'
+                : 'border-gray-300 dark:border-gray-500 bg-white dark:bg-white/10'
+            }
           `}
         >
           {selected && (

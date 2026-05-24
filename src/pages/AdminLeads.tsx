@@ -9,9 +9,7 @@ export function AdminLeads() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [confirmClear, setConfirmClear] = useState(false);
 
-  useEffect(() => {
-    setLeads(getLeadsFromStorage());
-  }, []);
+  useEffect(() => { setLeads(getLeadsFromStorage()); }, []);
 
   function handleClear() {
     if (confirmClear) {
@@ -25,31 +23,23 @@ export function AdminLeads() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[var(--tg-theme-secondary-bg-color,#f4f4f8)] dark:bg-[#1c1c1e]">
       {/* Header */}
-      <header className="bg-white border-b border-gray-100 px-5 py-4">
+      <header className="bg-[var(--tg-theme-bg-color,#fff)] dark:bg-[#1c1c1e] border-b border-gray-100 dark:border-white/[0.08] px-5 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <div className="flex items-center gap-2">
-              <Link to="/" className="text-brand-blue hover:underline text-sm font-medium">
-                ← На главную
-              </Link>
-            </div>
-            <h1 className="text-xl font-800 text-gray-900 mt-1" style={{ fontWeight: 800 }}>
+            <Link to="/" className="text-brand-blue dark:text-brand-purple hover:underline text-sm font-medium">
+              ← На главную
+            </Link>
+            <h1 className="text-xl text-gray-900 dark:text-white mt-1" style={{ fontWeight: 800 }}>
               Заявки
             </h1>
-            <p className="text-sm text-gray-500">
-              {leads.length === 0
-                ? 'Нет заявок'
-                : `${leads.length} ${pluralLeads(leads.length)}`}
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {leads.length === 0 ? 'Нет заявок' : `${leads.length} ${pluralLeads(leads.length)}`}
             </p>
           </div>
           {leads.length > 0 && (
-            <Button
-              variant={confirmClear ? 'danger' : 'ghost'}
-              size="sm"
-              onClick={handleClear}
-            >
+            <Button variant={confirmClear ? 'danger' : 'ghost'} size="sm" onClick={handleClear}>
               {confirmClear ? 'Подтвердить' : 'Очистить'}
             </Button>
           )}
@@ -61,29 +51,24 @@ export function AdminLeads() {
         {leads.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">📭</div>
-            <p className="text-gray-500 font-medium">Заявок пока нет</p>
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-gray-500 dark:text-gray-400 font-medium">Заявок пока нет</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
               Пройдите диагностику, чтобы появилась первая заявка
             </p>
             <div className="mt-6">
-              <Link to="/quiz">
-                <Button size="md">Начать диагностику</Button>
-              </Link>
+              <Link to="/quiz"><Button size="md">Начать диагностику</Button></Link>
             </div>
           </div>
         ) : (
           <div className="space-y-4">
-            {leads.map((lead) => (
-              <LeadCard key={lead.id} lead={lead} />
-            ))}
+            {leads.map((lead) => <LeadCard key={lead.id} lead={lead} />)}
           </div>
         )}
       </main>
 
-      {/* Dev notice */}
       <div className="px-5 pb-8">
-        <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-          <p className="text-xs text-amber-700 font-medium">
+        <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl px-4 py-3">
+          <p className="text-xs text-amber-700 dark:text-amber-400 font-medium">
             ⚙️ Dev-режим — данные из localStorage. В продакшн добавьте бэкенд и авторизацию.
           </p>
         </div>

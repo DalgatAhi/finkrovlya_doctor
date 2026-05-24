@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  // Activate dark: variants when [data-theme="dark"] is set on <html>
+  darkMode: ['class', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {

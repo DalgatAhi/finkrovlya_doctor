@@ -11,11 +11,8 @@ export function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
   function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? []);
     if (!files.length) return;
-
     const remaining = 5 - photos.length;
-    const toProcess = files.slice(0, remaining);
-
-    toProcess.forEach((file) => {
+    files.slice(0, remaining).forEach((file) => {
       const reader = new FileReader();
       reader.onload = (ev) => {
         const result = ev.target?.result as string;
@@ -23,7 +20,6 @@ export function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
       };
       reader.readAsDataURL(file);
     });
-
     e.target.value = '';
   }
 
@@ -33,18 +29,17 @@ export function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
 
   return (
     <div className="space-y-4">
-      {/* Upload zone */}
       {photos.length < 5 && (
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
           className={`
             w-full rounded-2xl border-2 border-dashed p-6
-            flex flex-col items-center gap-3 transition-all
+            flex flex-col items-center gap-3 transition-all active:scale-[0.98]
             ${
               photos.length === 0
-                ? 'border-brand-blue/30 bg-brand-gradient-soft hover:border-brand-blue/50'
-                : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+                ? 'border-brand-blue/30 dark:border-brand-purple/30 bg-brand-gradient-soft dark:bg-brand-purple/10 hover:border-brand-blue/50 dark:hover:border-brand-purple/50'
+                : 'border-gray-200 dark:border-white/15 bg-gray-50 dark:bg-white/[0.05] hover:border-gray-300 dark:hover:border-white/25'
             }
           `}
         >
@@ -56,28 +51,20 @@ export function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
             </svg>
           </div>
           <div className="text-center">
-            <p className="font-semibold text-gray-800">
+            <p className="font-semibold text-gray-800 dark:text-gray-100">
               {photos.length === 0 ? 'Загрузить фото' : `Добавить ещё (${photos.length}/5)`}
             </p>
-            <p className="text-sm text-gray-500 mt-0.5">JPG, PNG до 10 МБ каждое</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">JPG, PNG до 10 МБ каждое</p>
           </div>
         </button>
       )}
 
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        multiple
-        className="hidden"
-        onChange={handleFileChange}
-      />
+      <input ref={inputRef} type="file" accept="image/*" multiple className="hidden" onChange={handleFileChange} />
 
-      {/* Hints */}
       {photos.length === 0 && (
-        <div className="bg-amber-50 border border-amber-100 rounded-xl px-4 py-3">
-          <p className="text-sm text-amber-800 font-medium mb-1">Что лучше сфотографировать:</p>
-          <ul className="text-sm text-amber-700 space-y-0.5">
+        <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 rounded-xl px-4 py-3">
+          <p className="text-sm text-amber-800 dark:text-amber-300 font-medium mb-1">Что лучше сфотографировать:</p>
+          <ul className="text-sm text-amber-700 dark:text-amber-400 space-y-0.5">
             <li>• место протечки или пятна на потолке</li>
             <li>• участок крыши с улицы</li>
             <li>• стык, трубу или водосток</li>
@@ -85,11 +72,10 @@ export function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
         </div>
       )}
 
-      {/* Previews */}
       {photos.length > 0 && (
         <div className="grid grid-cols-3 gap-2">
           {photos.map((src, i) => (
-            <div key={i} className="relative group aspect-square rounded-xl overflow-hidden">
+            <div key={i} className="relative aspect-square rounded-xl overflow-hidden">
               <img src={src} alt={`Фото ${i + 1}`} className="w-full h-full object-cover" />
               <button
                 type="button"
@@ -106,17 +92,17 @@ export function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="aspect-square rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center hover:border-gray-300 transition-colors"
+              className="aspect-square rounded-xl border-2 border-dashed border-gray-200 dark:border-white/15 bg-gray-50 dark:bg-white/[0.05] flex items-center justify-center hover:border-gray-300 dark:hover:border-white/25 transition-colors"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M10 4v12M4 10h12" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" />
+                <path d="M10 4v12M4 10h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-gray-400 dark:text-gray-500" />
               </svg>
             </button>
           )}
         </div>
       )}
 
-      <p className="text-xs text-gray-400 text-center">
+      <p className="text-xs text-gray-400 dark:text-gray-500 text-center">
         Чем подробнее фото, тем точнее предварительный разбор
       </p>
     </div>
