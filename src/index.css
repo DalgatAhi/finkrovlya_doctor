@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ── Telegram CSS variable defaults (overridden at runtime by applyTheme) ── */
+  :root {
+    --tg-viewport-height: 100dvh;
+    --tg-theme-bg-color: #ffffff;
+    --tg-theme-secondary-bg-color: #f4f4f8;
+    --tg-theme-text-color: #111827;
+    --tg-theme-hint-color: #6b7280;
+    --tg-theme-button-color: #121193;
+    --tg-theme-button-text-color: #ffffff;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevent bounce scroll — important for Telegram Mini App */
+    overscroll-behavior: none;
+  }
+
+  body {
+    margin: 0;
+    background: var(--tg-theme-secondary-bg-color, #f4f4f8);
+    overscroll-behavior: none;
+    /* Disable text selection (feels more native) */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Allow text selection inside inputs */
+  input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  /* Safe areas */
+  .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+}
+
+/* Viewport-aware full height */
+#root {
+  min-height: 100dvh;
+  min-height: var(--tg-viewport-height, 100dvh);
+}
+
+/* Page-height container for Telegram */
+.tg-page {
+  min-height: var(--tg-viewport-height, 100dvh);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollable content area that fills remaining space */
+.tg-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@layer utilities {
+  .font-800 { font-weight: 800; }
+  .font-700 { font-weight: 700; }
+  .font-600 { font-weight: 600; }
+}
